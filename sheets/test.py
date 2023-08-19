@@ -1,3 +1,4 @@
+import json
 import os
 
 from google.auth.transport.requests import Request
@@ -6,7 +7,7 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
-SCOPES = ["https://googleapis.com/auth/spreadsheets"]
+SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
 
 SPREADSHEET_ID = "1q7hGgx_9-XTWRJkwQyD6vq-oBcFCR5rZHqvp0hjsJWQ"
 
@@ -34,11 +35,29 @@ def main():
         service = build("sheets", "v4", credentials=credentials)
         sheets = service.spreadsheets()
 
-        result = sheets.values().get(spreadsheetId=SPREADSHEET_ID, range="Sheet1!A1:C6").execute()
-        values = result.get("values", [])
+        """for row in range(2, 8):
 
-        for row in values:
-            print(values)
+            num1 = int(sheets.values().get(spreadsheetId=SPREADSHEET_ID, range=f"Sheet1!A{row}").execute().get("values")[0][0])
+            num2 = int(sheets.values().get(spreadsheetId=SPREADSHEET_ID, range=f"Sheet1!B{row}").execute().get("values")[0][0])
+            calculation_result = num1 + num2
+
+            sheets.values().update(spreadsheetId=SPREADSHEET_ID, range=f"Sheet1!C{row}",
+                                   valueInputOption="USER_ENTERED", body={"values": [[f"{calculation_result}"]]}).execute()
+            
+            sheets.values().update(spreadsheetId=SPREADSHEET_ID, range=f"Sheet1!D{row}",
+                                   valueInputOption="USER_ENTERED", body={"values": [["Done"]]}).execute()"""
+        
+        with open('sheets/layout.json') as f:
+
+            data = json.load(f)
+
+        for x in data:
+        
+            sheets.values().update(spreadsheetId=SPREADSHEET_ID, range=f"Game - Data!{x}1",
+                                   valueInputOption="USER_ENTERED", body={"values": [[data[x]]]}).execute()
+        
+        """sheets.values().update(spreadsheetId=SPREADSHEET_ID, range=f"Sheet1!C{row}",
+                                   valueInputOption="USER_ENTERED", body={"values": [[f"{calculation_result}"]]}).execute()"""
 
     except HttpError as error:
         print(error)

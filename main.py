@@ -1,16 +1,21 @@
 import os
 
-from bot.bot_setup import client
+from bot.bot_setup import SmiteBot
 
 from sheets.test import *
 
 
 def run():
 
-    """TOKEN = os.getenv('SIGNS_TOKEN')
-    client.run(TOKEN)"""
+    TOKEN = os.getenv('SIGNS_TOKEN')
 
-    main()
+    print(TOKEN)
+
+    bot = SmiteBot()
+    bot.setup_hook()
+    bot.run(TOKEN)
+
+    """main()"""
 
 
 if __name__ == '__main__':

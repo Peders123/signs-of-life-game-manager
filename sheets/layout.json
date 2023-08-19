@@ -1,0 +1,16 @@
+{
+    "A": "Role",
+    "B": "Team",
+    "C": "Player",
+    "D": "Kills",
+    "E": "Deaths",
+    "F": "Assists",
+    "G": "KDA",
+    "H": "Kill Participation",
+    "I": "GPM",
+    "J": "Damage",
+    "K": "Wards Placed",
+    "L": "Structure Damage",
+    "M": "Player Healing",
+    "N": "God Played"
+}
