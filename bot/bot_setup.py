@@ -2,6 +2,8 @@ import discord
 
 from discord.ext import commands
 
+from bot.smite import Smite
+
 
 class SmiteBot(commands.Bot):
 
@@ -13,7 +15,8 @@ class SmiteBot(commands.Bot):
 
     async def add_cogs(self):
 
-        cogs = []
+        cogs = [Smite(self)]
+
         for cog in cogs:
             await self.add_cog(cog)
 
