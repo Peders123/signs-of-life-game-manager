@@ -7,7 +7,8 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
-SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
+SCOPES = ["https://www.googleapis.com/auth/spreadsheets",
+          "https://www.googleapis.com/auth/drive"]
 
 SPREADSHEET_ID = "1q7hGgx_9-XTWRJkwQyD6vq-oBcFCR5rZHqvp0hjsJWQ"
 
@@ -35,7 +36,11 @@ def main():
         service = build("sheets", "v4", credentials=credentials)
         sheets = service.spreadsheets()
 
-        """for row in range(2, 8):
+        games_num = int(sheets.values().get(spreadsheetId=SPREADSHEET_ID, range=f"Sheet1!A2").execute().get("values")[0][0])
+
+        print(games_num)
+        
+        for row in range(2, 8):
 
             num1 = int(sheets.values().get(spreadsheetId=SPREADSHEET_ID, range=f"Sheet1!A{row}").execute().get("values")[0][0])
             num2 = int(sheets.values().get(spreadsheetId=SPREADSHEET_ID, range=f"Sheet1!B{row}").execute().get("values")[0][0])
@@ -45,7 +50,7 @@ def main():
                                    valueInputOption="USER_ENTERED", body={"values": [[f"{calculation_result}"]]}).execute()
             
             sheets.values().update(spreadsheetId=SPREADSHEET_ID, range=f"Sheet1!D{row}",
-                                   valueInputOption="USER_ENTERED", body={"values": [["Done"]]}).execute()"""
+                                   valueInputOption="USER_ENTERED", body={"values": [["Done"]]}).execute()
         
         with open('sheets/layout.json') as f:
 
@@ -56,8 +61,9 @@ def main():
             sheets.values().update(spreadsheetId=SPREADSHEET_ID, range=f"Game - Data!{x}1",
                                    valueInputOption="USER_ENTERED", body={"values": [[data[x]]]}).execute()
         
-        """sheets.values().update(spreadsheetId=SPREADSHEET_ID, range=f"Sheet1!C{row}",
-                                   valueInputOption="USER_ENTERED", body={"values": [[f"{calculation_result}"]]}).execute()"""
+        sheets.values().update(spreadsheetId=SPREADSHEET_ID, range=f"Sheet1!C{row}",
+                                   valueInputOption="USER_ENTERED", body={"values": [[f"{calculation_result}"]]}).execute()
 
     except HttpError as error:
         print(error)
+        
