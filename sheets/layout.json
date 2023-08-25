@@ -1,16 +1,35 @@
 {
-    "A": "Role",
-    "B": "Team",
-    "C": "Player",
-    "D": "Kills",
-    "E": "Deaths",
-    "F": "Assists",
-    "G": "KDA",
-    "H": "Kill Participation",
-    "I": "GPM",
-    "J": "Damage",
-    "K": "Wards Placed",
-    "L": "Structure Damage",
-    "M": "Player Healing",
-    "N": "God Played"
+    "Game": [
+        {
+            "A": "match_id",
+            "B": "password",
+            "C": "date",
+            "D": "patch",
+            "E": "purpose",
+            "F": "result",
+            "G": "screenshots",
+            "H": "vods",
+            "I": "comments"
+        }
+    ],
+    "Player": [
+        {
+            "A": "Role",
+            "B": "Team",
+            "C": "Player",
+            "D": "Kills",
+            "E": "Deaths",
+            "F": "Assists",
+            "G": "KDA",
+            "H": "Kill Participation",
+            "I": "GPM",
+            "J": "Damage",
+            "K": "Wards Placed",
+            "L": "Structure Damage",
+            "M": "Player Healing",
+            "N": "God Played"
+        }
+    ]
 }
+
+

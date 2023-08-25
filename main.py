@@ -9,11 +9,9 @@ def run():
 
     TOKEN = os.getenv('SIGNS_TOKEN')
 
-    main()
-
-    """bot = SmiteBot()
+    bot = SmiteBot()
     bot.setup_hook()
-    bot.run(TOKEN)"""
+    bot.run(TOKEN)
 
 
 if __name__ == '__main__':

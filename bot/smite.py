@@ -1,8 +1,10 @@
+from datetime import datetime
+
 from discord.ext import commands, tasks
 
 from api.smiteApi import PcSmiteAPI
 
-from sheets.test import main
+from sheets.sheetWrite import Sheet
 
 class Smite(commands.Cog):
 
@@ -10,6 +12,7 @@ class Smite(commands.Cog):
 
         self.bot = bot
         self.api = PcSmiteAPI()
+        self.sheet = Sheet()
 
     @commands.command(description="test")
     async def ping(self, ctx):
@@ -23,12 +26,6 @@ class Smite(commands.Cog):
         else:
             await ctx.reply("Success")
 
-    @commands.command(description="test command for spreadsheet")
-    async def test_spreadsheet(self, ctx):
-        main()
-        await ctx.reply("Success")
-
-
     @commands.command(description="records data from a match")
     async def log_match(self, ctx, match_id, purpose, opponent, password):
         try:
@@ -36,4 +33,22 @@ class Smite(commands.Cog):
         except ValueError:
             await ctx.reply("Invalid Match Id")
 
-        print(data = self.api.get_demo_details(match_id))
+        match = self.api.get_demo_details(match_id)[0]
+
+        date = datetime.strptime(match["Entry_Datetime"], "%m/%d/%Y %H:%M:%S %p")
+
+        # print(self.api.get_patch_info()['version_string'])
+
+        data = {
+            "match_id": match_id,
+            "password": password,
+            "date": date.strftime("%d/%m/%Y"),
+            "patch": self.api.get_patch_info()['version_string'],
+            "purpose": purpose,
+            "result": match["Winning_Team"],
+            "screenshots": "N/A",
+            "vods": "N/A",
+            "comments": "N/A"
+        }
+
+        self.sheet.write_game_data(data)
