@@ -59,6 +59,8 @@ class Sheet():
 
         keys = ['A','B','C','D','E','F','G','H','I']
 
+        row = self.get_games_num() + 2
+
         with open('sheets/layout.json', 'r') as f:
             layout = json.load(f)["Game"][0]
 
@@ -68,8 +70,18 @@ class Sheet():
                 service = build("sheets", "v4", credentials=self.credentials)
                 sheets = service.spreadsheets()
 
-                sheets.values().update(spreadsheetId=self.spreadsheet_id, range=f"Game - Data!{col}2",
+                sheets.values().update(spreadsheetId=self.spreadsheet_id, range=f"Game - Data!{col}{row}",
                                        valueInputOption="USER_ENTERED", body={"values": [[data[layout[col]]]]}).execute()
 
             except HttpError as error:
                 print(error)
+
+        try:
+            service = build("sheets", "v4", credentials=self.credentials)
+            sheets = service.spreadsheets()
+
+            sheets.values().update(spreadsheetId=self.spreadsheet_id, range=f"Overview!C3",
+                                    valueInputOption="USER_ENTERED", body={"values": [[row-1]]})
+
+        except HttpError as error:
+            print(error)

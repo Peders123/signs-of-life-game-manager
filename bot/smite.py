@@ -37,8 +37,6 @@ class Smite(commands.Cog):
 
         date = datetime.strptime(match["Entry_Datetime"], "%m/%d/%Y %H:%M:%S %p")
 
-        # print(self.api.get_patch_info()['version_string'])
-
         data = {
             "match_id": match_id,
             "password": password,
