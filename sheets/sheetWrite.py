@@ -36,23 +36,22 @@ class Sheet():
 
         self.credentials = credentials
 
-
-    def get_games_num(self):
-
         try:
             service = build("sheets", "v4", credentials=self.credentials)
-            sheets = service.spreadsheets()
-
-            result = sheets.values().get(spreadsheetId=self.spreadsheet_id, range="Overview!C3").execute()
-
-            values = result.get("values", [])
-
-            return values[0][0]
+            self.sheets = service.spreadsheets()
 
         except HttpError as error:
             print(error)
+            self.sheets = None
 
-            return -1
+
+    def get_games_num(self):
+
+        result = self.sheets.values().get(spreadsheetId=self.spreadsheet_id, range="Overview!C3").execute()
+
+        values = result.get("values", [])
+
+        return values[0][0]
         
     
     def write_game_data(self, data):
@@ -66,22 +65,8 @@ class Sheet():
 
         for col in keys:
 
-            try:
-                service = build("sheets", "v4", credentials=self.credentials)
-                sheets = service.spreadsheets()
+            self.sheets.values().update(spreadsheetId=self.spreadsheet_id, range=f"Game - Data!{col}{row}",
+                                        valueInputOption="USER_ENTERED", body={"values": [[data[layout[col]]]]}).execute()
 
-                sheets.values().update(spreadsheetId=self.spreadsheet_id, range=f"Game - Data!{col}{row}",
-                                       valueInputOption="USER_ENTERED", body={"values": [[data[layout[col]]]]}).execute()
-
-            except HttpError as error:
-                print(error)
-
-        try:
-            service = build("sheets", "v4", credentials=self.credentials)
-            sheets = service.spreadsheets()
-
-            sheets.values().update(spreadsheetId=self.spreadsheet_id, range=f"Overview!C3",
+        self.sheets.values().update(spreadsheetId=self.spreadsheet_id, range=f"Overview!C3",
                                     valueInputOption="USER_ENTERED", body={"values": [[row-1]]})
-
-        except HttpError as error:
-            print(error)
